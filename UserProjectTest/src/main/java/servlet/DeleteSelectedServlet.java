@@ -1,0 +1,46 @@
+package servlet;
+
+import service.UserService;
+import service.impl.UserServiceImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+@WebServlet("/deleteSelectedServlet")
+public class DeleteSelectedServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        request.setCharacterEncoding("utf-8");
+        response.setContentType("application/json;charset=utf-8");
+        String[] values = request.getParameterValues("id[]");
+        //删除
+        int sum=0;
+        UserService userService=new UserServiceImpl();
+        Map<String,Object> map=new HashMap<>();
+        for(int i=0;i<values.length;i++){
+            int j = Integer.parseInt(values[i]);
+            //调用Service层方法删除
+            int delete = userService.Delete(j);
+            sum=sum+delete;
+        }
+        if(sum==values.length){
+            //证明删除成功
+            map.put("msg",true);
+        }else {
+            map.put("msg",false);
+        }
+        //将map转化为json
+        ObjectMapper mapper=new ObjectMapper();
+        mapper.writeValue(response.getWriter(),map);
+    }
+
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        this.doPost(request, response);
+    }
+}
