@@ -1,0 +1,109 @@
+<!-- HTML5文档-->
+<!DOCTYPE html>
+<!-- 网页使用的语言 -->
+<html lang="zh-CN">
+<head>
+    <!-- 指定字符集 -->
+    <meta charset="utf-8">
+    <!-- 使用Edge最新的浏览器的渲染方式 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- viewport视口：网页可以根据设置的宽度自动进行适配，在浏览器的内部虚拟一个容器，容器的宽度与设备的宽度相同。
+    width: 默认宽度与设备的宽度相同
+    initial-scale: 初始的缩放比，为1:1 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>添加题目</title>
+
+    <!-- 1. 导入CSS的全局样式 -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- 2. jQuery导入，建议使用1.9以上的版本 -->
+    <script src="js/jquery-2.1.0.min.js"></script>
+    <!-- 3. 导入bootstrap的js文件 -->
+    <!--<script src="js/bootstrap.min.js"></script>-->
+    <script>
+        $(function () {
+            $("#submit").click(function () {
+                var name=$("#name").val();
+                var aSelect=$("#Aselect").val();
+                var bSelect=$("#Bselect").val();
+                var cSelect=$("#Cselect").val();
+                var dSelect=$("#Dselect").val();
+                var score=$("#score").val();
+                var answer = $("#answer").val();
+                $.ajax({
+                    url:"/addItemServlet",
+                    data:{"title":name,"aSelect":aSelect,"bSelect":bSelect,"cSelect":cSelect,"dSelect":dSelect,"score":score,"answer":answer},
+                    type:"post",
+                    dataType:"json",
+                    success:function (data) {
+                        console.log(data);
+                        if(data.msg===true){
+                            //成功了
+                            alert("添加成功");
+                            window.location.href="list.html";
+                        }else{
+                            alert("添加失败");
+                        }
+                    },
+                    error : function (a,b,c) {
+                        console.log(a);
+                        console.log(b);
+                        console.log(c);
+                    }
+                });
+            });
+            $("#return").click(function () {
+                window.location.href="list.html";
+            });
+            $("#reset").click(function () {
+                $("form").val("");
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <center><h3>添加联系人页面</h3></center>
+    <form>
+        <div class="form-group">
+            <label for="name">题目：</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="请输入题目">
+        </div>
+
+        <div class="form-group">
+            <label for="Aselect">A选项：</label>
+            <input type="text" class="form-control" id="Aselect" name="age" placeholder="请输入>A选项">
+        </div>
+
+        <div class="form-group">
+            <label for="Bselect">B选项：</label>
+            <input type="text" class="form-control" id="Bselect" name="qq" placeholder="请输入B选项"/>
+        </div>
+
+        <div class="form-group">
+            <label for="Cselect">C选项：</label>
+            <input type="text" class="form-control" id="Cselect" name="email" placeholder="请输入C选项"/>
+        </div>
+        <div class="form-group">
+            <label for="Dselect">D选项：</label>
+            <input type="text" class="form-control" id="Dselect" name="email" placeholder="请输入D选项"/>
+        </div>
+        <div class="form-group">
+            <label for="answer">答案：</label>
+            <input type="text" class="form-control" id="answer" name="email" placeholder="请输入答案"/>
+        </div>
+        <div class="form-group">
+            <label for="score">分值：</label>
+            <input type="text" class="form-control" id="score" name="email" placeholder="请输入分值"/>
+        </div>
+    </form>
+
+    <div class="form-group" style="text-align: center">
+        <input id="submit" class="btn btn-primary" type="submit" value="提交" />
+        <input id="reset" class="btn btn-default" type="reset" value="重置" />
+        <input id="return" class="btn btn-default" type="button" value="返回" />
+    </div>
+
+</div>
+</body>
+</html>
